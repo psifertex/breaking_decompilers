@@ -3,15 +3,6 @@
 
 #define PASSWORD "correct"
 
-
-void check_password(const char *input) {
-    if (strcmp(input, PASSWORD) == 0) {
-        printf("Access granted!\n");
-    } else {
-        printf("Access denied!\n");
-    }
-}
-
 int main() {
     char input[100];
 
@@ -24,7 +15,11 @@ int main() {
         input[len-1] = '\0';
     }
 
-    check_password(input);
+    if (strcmp(input, PASSWORD) == 0) {
+        printf("Access granted!\n");
+    } else {
+        printf("Access denied!\n");
+    }
     return 0;
 }
 

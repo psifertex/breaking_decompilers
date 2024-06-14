@@ -3,21 +3,13 @@
 
 #define PASSWORD "correct"
 
-
-void check_password(const char *input) {
-    if (strcmp(input, PASSWORD) == 0) {
-        printf("Access granted!\n");
-    } else {
-        printf("Access denied!\n");
-    }
-}
-
 int main() {
     char input[100];
 
+  /* This is it, just misalign! */
     __asm__( \
         "push rax;" \
-        "mov rax, 0x03eb000000000000;" \
+        "mov rax, 0x03eb353535353535;" \
         ".byte 0xeb;" \
         ".byte 0xfc;" \
         "ret;" \
@@ -33,7 +25,11 @@ int main() {
         input[len-1] = '\0';
     }
 
-    check_password(input);
+    if (strcmp(input, PASSWORD) == 0) {
+        printf("Access granted!\n");
+    } else {
+        printf("Access denied!\n");
+    }
     return 0;
 }
 
