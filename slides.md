@@ -61,19 +61,18 @@ Note: these are clearly and obviously lost but it's more than that, for example:
 
 ## Informally
 
-test  `word` 
 ```c
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[]) {
-    int fd = open(argv[1], O_RDONLY);
-    size_t size = lseek(fd, 0, SEEK_END);
-    int prot = PROT_EXEC | PROT_READ;
-    void *mem = mmap(NULL, size, prot, MAP_PRIVATE, fd, 0);
-    ((void(*)())mem)();
-    return 0;
+  int fd = open(argv[1], O_RDONLY);
+  size_t size = lseek(fd, 0, SEEK_END);
+  int prot = PROT_EXEC | PROT_READ;
+  void *mem = mmap(NULL, size, prot, MAP_PRIVATE, fd, 0);
+  ((void(*)())mem)();
+  return 0;
 }
 ```
 
@@ -111,7 +110,7 @@ Note: Sound familiar? No, really, anybody? Does this sound like any other progra
 
 ----
 
-## How Decompilers Work
+## How ~De~compilers Work
 
  - Parsing
  - ~Lifting~ Lowering
@@ -121,7 +120,7 @@ Note: What about now?
 
 ----
 
-<!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background="/images/chatgpt-how-compilers-work.png" -->
+<!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background-image="/images/chatgpt-how-compilers-work.png" -->
 
 Note: Yup, that's exactly how a compiler works. It turns out, that there's a ton of similarity between building a compiler and a decompiler. Which makes sense since they're both having to translate from one representation into another. Just turns out, one is about putting the sausage back into the pig.
 
@@ -182,6 +181,7 @@ How much does it prevent analysis/understanding?
 ![](/images/effectiveness-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
+Note: higher is better, so the higher the number, the more effective the obfuscation is at breaking analysis
 ----
 
 ## Evident
@@ -191,7 +191,7 @@ How obvious is it?
 ![](/images/evident-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
-Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better.
+Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive. 
 
 ----
 
@@ -201,6 +201,9 @@ How much work is it to implement?
 
 ![](/images/effort-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
+
+
+Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive. 
 
 ---
 
@@ -217,7 +220,7 @@ Duplicate Sections
 <table>
 <tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
 <tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>3</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
 </table>
 
 Note: Found accidentally by zetatwo // Calle when making a CTF challenge, but there's a million other variants. I think this is one of my favorite techniques specifically because it's not at all obvious something is even wrong in the first place. You can make the difference between the real code and fake code super subtle if you like. Of course, just running in a debugger should be enough to spot the differences.  Note evident at all! Can be extremely subtle if you want it to be.
@@ -238,6 +241,8 @@ Mis-aligned instructions
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
+Note: oldest trick in the book, still breaks IDA super easily! At one point they "fixed" it by matching the exact byte pattern match (turns out, they only did it on x86, x64 is still vulnerable to the same thing)
+
 ----
 
 ## Demo!
@@ -251,15 +256,22 @@ Just use an instruction that is rare and not implemented, or is incorrectly lift
 <table>
 <tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
 <tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>4</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
 </table>
 
-Note: similar in terms of effectiveness to mis-aligned instructions, depends on the tool and how it gets the lifting wrong. More work than the mis-aligned instructions because you have to find the instructions first, but you can probably just go trolling through libraries or bug reports for Binja or Ghidra. Or just use concensus evaluation and disassembly a single instruction at a time in LOTS of tools. Does require normalization though which can be a headache.
+Note: similar in terms of effectiveness to mis-aligned instructions, depends on the tool and how it gets the lifting wrong. More work than the mis-aligned instructions because you have to find the instructions first, but you can probably just go trolling through libraries or bug reports for Binja or Ghidra. Or just use consensus evaluation and disassembly a single instruction at a time in LOTS of tools. Does require normalization though which can be a headache. That said, relatively easy to fix on the architecture/parsing side.
 
 ----
 
 ## Break the Optimizations
 
+How do you handle memory permission?
+
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+</table>
 
 ---
 
