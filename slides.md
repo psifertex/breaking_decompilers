@@ -39,11 +39,11 @@ After this talk, you should:
 ## Anti-Goals
 
 - Not about breaking debuggers
-- Not about using pre-packaged solutions 
+- Not about an exhaustive list of all possible techniques
 
 Note: While this talk isn't explicitly about breaking debuggers and we're not intentionally targeting them, it's worth noting that most debuggers are also disassemblers and have to parse files so several of these techniques will be applicable. 
 
-Instead of showing off a pre-built tool I'll show a bunch of examples I cobbled together and while you could certainly use them as is, this is more meant as an example to spark ideas for other ways you might want to break assumptions and tools.
+Instead of showing off a ton of pre-built tools and an exhaustive list of all techniques I'll show a handful of examples that hopefully inspire new techniques.
 
 ----
 
@@ -222,11 +222,36 @@ Note: Pardon the awkward phrasing, I know "stealthy" works better, but this make
 
 Note: Ok, with that out of the way, let's actually go break some decompilers.
 
+----
+
+## Base Challenge
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char input[100];
+    printf("Enter the password: ");
+    fgets(input, sizeof(input), stdin);
+    if (strcmp(input, "correct") == 0) {
+        printf("Access granted!\n");
+    } else {
+        printf("Access denied!\n");
+    }
+    return 0;
+}
+```
+
+Note: not quite exactly what we're using, but close enough and fits on a slide. We're going to take this same challenge and apply a bunch of our techniques to it and see how it looks after each.
+
 ---
 
 ## Break the Parsing
 
-Duplicate Sections
+----
+
+### Segment Shenanigans
 
 <table>
 <tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
@@ -238,17 +263,39 @@ Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but the
 
 ----
 
-## Demo!
+#### Demo! 
+
+`./examples/zetatwo`
 
 ----
 
-## Break the Parsing
+### Relocations
+
+Relocations are the worst
+
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
+</table>
+
+Note: A pain to implement but infinitely complex
 
 ----
 
-## Break the Parsing
+### Build Your Own!
 
-Mis-aligned instructions
+1. Fuzz the file, run it. 
+1. If it still works, dump the decompilation and pattern match
+1. GOTO 1
+
+---
+
+## Break the Lifting
+
+----
+
+### Alignment 
 
 <table>
 <tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
@@ -260,19 +307,13 @@ Note: oldest trick in the book, still breaks IDA super easily! At one point they
 
 ----
 
-## Demo!
+#### Demo!
+
+`./examples/alignment`
 
 ----
 
-## Build Your Own!
-
-1. Fuzz the file, run it. 
-1. If it still works, dump the decompilation and pattern match
-1. GOTO 1
-
----
-
-## Break the Lifting
+### Vectorized
 
 Just use an instruction that is rare and not implemented, or is incorrectly lifted.
 
@@ -284,21 +325,55 @@ Just use an instruction that is rare and not implemented, or is incorrectly lift
 
 Note: similar in terms of effectiveness to mis-aligned instructions, depends on the tool and how it gets the lifting wrong. More work than the mis-aligned instructions because you have to find the instructions first, but you can probably just go trolling through libraries or bug reports for Binja or Ghidra. Or just use consensus evaluation and disassembly a single instruction at a time in LOTS of tools. Does require normalization though which can be a headache. That said, relatively easy to fix on the architecture/parsing side.
 
-----
-
-## Demo!
-
 ---
 
 ## Break the Optimizations
 
-How do you handle memory permission?
+----
+
+### STOP 🛑
+
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
+</table>
+
+`./examples/stop`
+
+Note: The particular optimization being abused here is in the "no-return" property as well as the fact that IDA's heuristic for when to apply the type is permissive. Of course, on the flip-side, there are potentially binaries where static signatures don't apply where's IDA's heuristic might result in better analysis. Most of these are simply choices that the tools make to decide what they think is the best default case but they can easily be abused.
+
+----
+
+#### Demo!
+
+----
+
+### UPX
 
 <table>
 <tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
 <tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
+
+`examples/upx`
+
+----
+
+#### Demo!
+
+----
+
+### Dataflow Propagation/Memory Permissions
+
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+</table>
+
+`examples/perms`
 
 ----
 
@@ -318,3 +393,11 @@ How do you handle memory permission?
 ## Questions?
 
 https://github.com/psifertex/breaking_decompilers
+
+----
+
+## Credits / Acknowledgements
+
+- [reveal-md](https://github.com/webpro/reveal-md)
+- [lima](https://github.com/lima-vm/lima)
+- [chatgpt](https://chat.openai.com/)
