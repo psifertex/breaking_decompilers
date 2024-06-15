@@ -16,6 +16,17 @@ Note: I'm one of the developers behind Binary Ninja
 
 ----
 
+## You?
+
+Who has...
+- written C?
+- used a debugger?
+- used a decompiler?
+- written a decompiler?
+- written a decompiler plugin?
+
+----
+
 ## Goals
 
 After this talk, you should:
@@ -191,7 +202,7 @@ How obvious is it?
 ![](/images/evident-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
-Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive. 
+Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive.  This is one of the most important attributes as too often people just want to make it hard to reverse something, but what is far more valuable is _subtly_ breaking a decompiler. That, used judiciously, can cause far more trouble than the world's most opaque VM implementation.
 
 ----
 
@@ -213,7 +224,7 @@ Note: Ok, with that out of the way, let's actually go break some decompilers.
 
 ---
 
-## Break the Parsing (1/2)
+## Break the Parsing
 
 Duplicate Sections
 
@@ -223,7 +234,7 @@ Duplicate Sections
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
 </table>
 
-Note: Found accidentally by zetatwo // Calle when making a CTF challenge, but there's a million other variants. I think this is one of my favorite techniques specifically because it's not at all obvious something is even wrong in the first place. You can make the difference between the real code and fake code super subtle if you like. Of course, just running in a debugger should be enough to spot the differences.  Note evident at all! Can be extremely subtle if you want it to be.
+Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but there's a million other variants. I think this is one of my favorite techniques specifically because it's not at all obvious something is even wrong in the first place. You can make the difference between the real code and fake code super subtle if you like. Of course, just running in a debugger should be enough to spot the differences.  Note evident at all! Can be extremely subtle if you want it to be.
 
 ----
 
@@ -231,7 +242,7 @@ Note: Found accidentally by zetatwo // Calle when making a CTF challenge, but th
 
 ----
 
-## Break the Parsing (2/2)
+## Break the Parsing
 
 Mis-aligned instructions
 
@@ -246,6 +257,14 @@ Note: oldest trick in the book, still breaks IDA super easily! At one point they
 ----
 
 ## Demo!
+
+----
+
+## Build Your Own!
+
+1. Fuzz the file, run it. 
+1. If it still works, dump the decompilation and pattern match
+1. GOTO 1
 
 ---
 
@@ -263,6 +282,10 @@ Note: similar in terms of effectiveness to mis-aligned instructions, depends on 
 
 ----
 
+## Demo!
+
+---
+
 ## Break the Optimizations
 
 How do you handle memory permission?
@@ -273,8 +296,21 @@ How do you handle memory permission?
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
----
+----
 
 ## Demo!
 
 
+---
+
+## Conclusion
+
+- What are your goals?
+- Do you care more about increased difficulty or subtle breakage?
+- Decompilers are easy to break, hard to make.
+
+----
+
+## Questions?
+
+https://github.com/psifertex/breaking_decompilers
