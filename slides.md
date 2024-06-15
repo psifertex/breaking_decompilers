@@ -357,11 +357,24 @@ Note: The particular optimization being abused here is in the "no-return" proper
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
-`examples/upx`
+`./examples/upx`
 
 ----
 
 #### Demo!
+
+----
+
+### SCC
+
+Similar to Jon's talk, but many people don't know SCC has a variety of obfuscations built in.
+
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+</table>
+
 
 ----
 
@@ -373,12 +386,27 @@ Note: The particular optimization being abused here is in the "no-return" proper
 <tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
-`examples/perms`
+----
+
+#### Demo!
+
+`./examples/perms`
 
 ----
 
-## Demo!
+### SCC
 
+<table>
+<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+</table>
+
+----
+
+#### Demo!
+
+`./examples/scc`
 
 ---
 
