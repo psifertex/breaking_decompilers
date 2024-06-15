@@ -1,4 +1,4 @@
-SUBDIRS := 0 1 2 upx stop
+SUBDIRS := base alignment 2 upx stop
 
 # Detect the operating system and set the extension
 ifeq ($(shell uname), Darwin)

@@ -244,6 +244,10 @@ Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but the
 
 ## Break the Parsing
 
+----
+
+## Break the Parsing
+
 Mis-aligned instructions
 
 <table>
