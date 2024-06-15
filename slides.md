@@ -422,6 +422,8 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 
 https://github.com/psifertex/breaking_decompilers
 
+![](/images/repo-light.png)
+
 ----
 
 ## Credits / Acknowledgements
