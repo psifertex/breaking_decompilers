@@ -4,13 +4,13 @@
 
 ----
 
-<!-- .slide: data-background-transition="none" data-background="/images/family.png" -->
+<!-- .slide: data-background-transition="none" data-background="./images/family.png" -->
 
 Note: I'm Jordan
 
 ----
 
-<!-- .slide: data-background-transition="none" data-background-color="white" data-background-size="contain" data-background="/images/binja.png" -->
+<!-- .slide: data-background-transition="none" data-background-color="white" data-background-size="contain" data-background="./images/binja.png" -->
 
 Note: I'm one of the developers behind Binary Ninja
 
@@ -131,7 +131,7 @@ Note: What about now?
 
 ----
 
-<!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background-image="/images/chatgpt-how-compilers-work.png" -->
+<!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background-image="./images/chatgpt-how-compilers-work.png" -->
 
 Note: Yup, that's exactly how a compiler works. It turns out, that there's a ton of similarity between building a compiler and a decompiler. Which makes sense since they're both having to translate from one representation into another. Just turns out, one is about putting the sausage back into the pig.
 
@@ -189,7 +189,7 @@ Note: Before we actually break things, we do need to make sure we talk about dif
 
 How much does it prevent analysis/understanding?
 
-![](/images/effectiveness-light.png)
+![](./images/effectiveness-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
 Note: higher is better, so the higher the number, the more effective the obfuscation is at breaking analysis
@@ -199,7 +199,7 @@ Note: higher is better, so the higher the number, the more effective the obfusca
 
 How obvious is it?
 
-![](/images/evident-light.png)
+![](./images/evident-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
 Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive.  This is one of the most important attributes as too often people just want to make it hard to reverse something, but what is far more valuable is _subtly_ breaking a decompiler. That, used judiciously, can cause far more trouble than the world's most opaque VM implementation.
@@ -210,7 +210,7 @@ Note: Pardon the awkward phrasing, I know "stealthy" works better, but this make
 
 How much work is it to implement? 
 
-![](/images/effort-light.png)
+![](./images/effort-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
 
@@ -254,9 +254,9 @@ Note: not quite exactly what we're using, but close enough and fits on a slide. 
 ### Segment Shenanigans
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
 </table>
 
 Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but there's a million other variants. I think this is one of my favorite techniques specifically because it's not at all obvious something is even wrong in the first place. You can make the difference between the real code and fake code super subtle if you like. Of course, just running in a debugger should be enough to spot the differences.  Note evident at all! Can be extremely subtle if you want it to be.
@@ -269,14 +269,18 @@ Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but the
 
 ----
 
+![](./images/libkrb5support.so.0.ida.png)
+
+----
+
 ### Relocations
 
 Relocations are the worst
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
 </table>
 
 Note: A pain to implement but infinitely complex
@@ -298,9 +302,9 @@ Note: A pain to implement but infinitely complex
 ### Alignment 
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 Note: oldest trick in the book, still breaks IDA super easily! At one point they "fixed" it by matching the exact byte pattern match (turns out, they only did it on x86, x64 is still vulnerable to the same thing)
@@ -318,9 +322,9 @@ Note: oldest trick in the book, still breaks IDA super easily! At one point they
 Just use an instruction that is rare and not implemented, or is incorrectly lifted.
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
 </table>
 
 Note: similar in terms of effectiveness to mis-aligned instructions, depends on the tool and how it gets the lifting wrong. More work than the mis-aligned instructions because you have to find the instructions first, but you can probably just go trolling through libraries or bug reports for Binja or Ghidra. Or just use consensus evaluation and disassembly a single instruction at a time in LOTS of tools. Does require normalization though which can be a headache. That said, relatively easy to fix on the architecture/parsing side.
@@ -334,12 +338,10 @@ Note: similar in terms of effectiveness to mis-aligned instructions, depends on 
 ### STOP 🛑
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
 </table>
-
-`./examples/stop`
 
 Note: The particular optimization being abused here is in the "no-return" property as well as the fact that IDA's heuristic for when to apply the type is permissive. Of course, on the flip-side, there are potentially binaries where static signatures don't apply where's IDA's heuristic might result in better analysis. Most of these are simply choices that the tools make to decide what they think is the best default case but they can easily be abused.
 
@@ -347,14 +349,16 @@ Note: The particular optimization being abused here is in the "no-return" proper
 
 #### Demo!
 
+`./examples/stop`
+
 ----
 
 ### UPX
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 `./examples/upx`
@@ -370,9 +374,9 @@ Note: The particular optimization being abused here is in the "no-return" proper
 Similar to Jon's talk, but many people don't know SCC has a variety of obfuscations built in.
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 
@@ -381,9 +385,9 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 ### Dataflow Propagation/Memory Permissions
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 ----
@@ -397,9 +401,9 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 ### SCC
 
 <table>
-<tr><td><img src="/images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="/images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
-<tr><td><img src="/images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 ----
@@ -420,9 +424,11 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 
 ## Questions?
 
-https://github.com/psifertex/breaking_decompilers
+- https://github.com/psifertex/breaking_decompilers
+- https://twitter.com/psifertex
+- https://binary.ninja/
 
-![](/images/repo-light.png)
+![](./images/repo-light.png)
 
 ----
 
