@@ -27,7 +27,7 @@ $(TARGET): $(OBJ)
 
 # Clean up the build files
 clean:
-	rm -f $(OBJ) base.elf base.macho
+	rm -f $(OBJ) base.elf base.macho base.elf.upx base.macho.upx
 
 .PHONY: all clean
 

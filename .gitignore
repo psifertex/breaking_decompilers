@@ -1,1 +1,2 @@
 *.o
+**/.claude/settings.local.json
