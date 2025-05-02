@@ -1,18 +1,18 @@
 # Breaking Decompilers
 
-...or, How To Make My Life Difficult
+...or, How To Make Jordan's Life Hard
 
 ----
 
 <!-- .slide: data-background-transition="none" data-background="./images/family.png" -->
 
-Note: I'm Jordan
+Note: I'm Jordan!
 
 ----
 
 <!-- .slide: data-background-transition="none" data-background-color="white" data-background-size="contain" data-background="./images/binja.png" -->
 
-Note: I'm one of the developers behind Binary Ninja
+Note: I'm one of the developers behind Binary Ninja. I like to say (truthfully) that I'm the worst developer on a team of very smart ones building Binary Ninja. But as a result it means I get to go out into the public and talk to people about it. :-) 
 
 ----
 
@@ -25,6 +25,8 @@ Who has...
 - written a decompiler?
 - written a decompiler plugin?
 
+Note: By a show of hands, please show:
+
 ----
 
 ## Goals
@@ -33,6 +35,8 @@ After this talk, you should:
 
 - understand more about how decompilers work and thus,
 - have lots of ideas on how to break them
+
+Note: Goals for this talk. 
 
 ----
 
@@ -179,9 +183,9 @@ Note: and several other topics worthy of an entire semester worth of advanced CS
 
 ---
 
-# Almost There!
+# Evaluation Criteria
 
-Note: Before we actually break things, we do need to make sure we talk about different properties we might care about.
+Note: Before we actually break things, let's talk about the different properties we might care about regarding obfuscation.
 
 ----
 
@@ -435,5 +439,5 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 ## Credits / Acknowledgements
 
 - [reveal-md](https://github.com/webpro/reveal-md)
-- [lima](https://github.com/lima-vm/lima)
-- [chatgpt](https://chat.openai.com/)
+- [podman](https://podman.io/)
+- [chatgpt](https://chat.openai.com/) (o4-mini for image generation)
