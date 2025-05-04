@@ -1,10 +1,19 @@
 #!/bin/bash
 
-# Check if build-only flag is provided
+# Check for command line arguments
 BUILD_ONLY=false
-if [ "$1" = "--build-only" ]; then
-    BUILD_ONLY=true
-fi
+EXPORT_PDF=false
+
+for arg in "$@"; do
+    case $arg in
+        build)
+            BUILD_ONLY=true
+            ;;
+        export)
+            EXPORT_PDF=true
+            ;;
+    esac
+done
 
 SCRIPT=$(realpath "$0")
 SP=$(dirname "$SCRIPT")
@@ -57,6 +66,31 @@ echo "Build completed successfully!"
 echo "- macOS binaries: .macho files in each example directory"
 echo "- Linux binaries: .elf files in each example directory"
 echo "- UPX compressed binaries: examples/upx/base.elf.upx and examples/upx/base.macho.upx (if UPX installed locally)"
+
+# Export static site if requested
+if [ "$EXPORT_PDF" = true ]; then
+    echo "Exporting static site for printing..."
+    
+    # Create output directory if it doesn't exist
+    mkdir -p "$SP/output"
+    
+    # Generate static site for printing
+    podman run --rm \
+        -v "$SP":/slides \
+        -v "$SP"/images:/_assets/images \
+        -v "$SP"/output:/output \
+        webpronl/reveal-md:latest /slides/index.md \
+        --static /output
+        
+    echo "Static site exported to ./output/"
+    echo "To create PDF, open ./output/index.html in a browser and use the browser's print function."
+    echo "For best results, use Chrome or Edge and set the print options to:"
+    echo " - Background graphics: On"
+    echo " - Paper size: Letter or A4"
+    echo " - Margins: None"
+    
+    exit 0
+fi
 
 # Exit if build-only flag was provided
 if [ "$BUILD_ONLY" = true ]; then
