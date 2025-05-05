@@ -100,6 +100,10 @@ fi
 
 # Run the reveal-md server
 echo "Starting presentation server..."
+echo "TO PRINT:"
+echo "http://0.0.0.0:1948/index.md?view=print\n\n"
+echo "TO VIEW:"
+echo "http://0.0.0.0:1948/index.md\n\n"
 podman run --rm -p 1948:1948 -p 35729:35729 \
     -v "$SP":/slides \
     -v "$SP"/images:/_assets/images \
