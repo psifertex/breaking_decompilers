@@ -42,10 +42,10 @@ Note: Goals for this talk.
 
 ## Anti-Goals
 
-- Not about breaking debuggers
-- Not about an exhaustive list of all possible techniques
+- Not breaking debuggers
+- Not an exhaustive list of all possible techniques
 
-Note: While this talk isn't explicitly about breaking debuggers and we're not intentionally targeting them, it's worth noting that most debuggers are also disassemblers and have to parse files so several of these techniques will be applicable. 
+Note: While this talk isn't explicitly about breaking debuggers and we're not intentionally targeting them, it's worth noting that most debuggers are also disassemblers and have to parse files so several of these techniques will still apply. However, there are other techniques that are only applicable in dynamic analysis situations.
 
 Instead of showing off a ton of pre-built tools and an exhaustive list of all techniques I'll show a handful of examples that hopefully inspire new techniques.
 
@@ -54,7 +54,7 @@ Instead of showing off a ton of pre-built tools and an exhaustive list of all te
 ## Outline
 
  - Why Decompilers Are Impossible
- - How Decompilers Work
+ - How Decompilers Work At All
  - `(╯°□°）╯︵ ┻━┻`
 
 ---
@@ -111,11 +111,11 @@ Thankfully, we don't have to be perfect, we just have to work most of the time. 
 
 ---
 
-# How Decompilers Work
+# How Decompilers Work At All
 
 ----
 
-## How Decompilers Work
+## How Decompilers Work At All
 
  - Parsing
  - Lifting
@@ -249,6 +249,23 @@ int main() {
 
 Note: not quite exactly what we're using, but close enough and fits on a slide. We're going to take this same challenge and apply a bunch of our techniques to it and see how it looks after each.
 
+
+---
+
+## Examples
+
+ - Break Parsing
+  - Segments
+  - Relocations
+ - Break Lifting
+  - Alignment
+  - Vectorization
+ - Break Optimizations
+  - What's in a Name?
+  - Packers
+  - Custom Compiler
+  - Permissions/Dataflow
+
 ---
 
 ## Break the Parsing
@@ -355,6 +372,8 @@ Note: The particular optimization being abused here is in the "no-return" proper
 
 `./examples/stop`
 
+[🐶⚡️🔗](https://dogbolt.org/?id=5149a9c7-84ce-4acf-9e47-7312a6b97315#BinaryNinja=141&Hex-Rays=158&angr=136&Ghidra=114)
+
 ----
 
 ### UPX
@@ -375,7 +394,7 @@ Note: The particular optimization being abused here is in the "no-return" proper
 
 ### SCC
 
-Similar to Jon's talk, but many people don't know SCC has a variety of obfuscations built in.
+Our newly [open-sourced](https://github.com/Vector35/scc) Shellcode Compiler supports many built in obfuscations.
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
@@ -383,6 +402,15 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
+Note: Has many built-in obfuscations.
+
+----
+
+### SCC
+
+----
+
+##### Demo! 
 
 ----
 
@@ -415,6 +443,29 @@ Similar to Jon's talk, but many people don't know SCC has a variety of obfuscati
 #### Demo!
 
 `./examples/scc`
+
+---
+
+## Summary of Techniques
+
+<style>
+.reveal table {
+  font-size: 0.7em;
+}
+</style>
+
+| Technique | Effectiveness | Evident | Effort |
+|-----------|--------------|---------|--------|
+| Segment Shenanigans | 5 | 5 | 1 |
+| Relocations | 5 | 5 | 1 |
+| Alignment | 3 | 2 | 5 |
+| Vectorized | 3 | 2 | 2 |
+| STOP | 3 | 2 | 2 |
+| UPX | 4 | 4 | 5 |
+| SCC | 4 | 2 | 5 |
+| Dataflow/Permissions | 4 | 4 | 5 |
+
+Note: Higher scores are better in all categories.
 
 ---
 
