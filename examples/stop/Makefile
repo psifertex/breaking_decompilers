@@ -20,6 +20,9 @@ all: $(TARGET)
 # Rule to link the object files
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
+	# Replace "stop" with "exit" in the binary (they have the same length)
+	LC_ALL=C sed -i.bak 's/stop/exit/g' $@
+	rm -f $@.bak
 
 # Rule to compile the source files
 %.o: %.c
@@ -27,7 +30,7 @@ $(TARGET): $(OBJ)
 
 # Clean up the build files
 clean:
-	rm -f $(OBJ) base.elf base.macho
+	rm -f $(OBJ) base.elf base.macho *.bak
 
 .PHONY: all clean
 
