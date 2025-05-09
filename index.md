@@ -308,16 +308,16 @@ Note: not quite exactly what we're using, but close enough and fits on a slide. 
 ## Examples
 
  - Break Parsing
-   - Sections/Segments
    - Relocations
+   - Sections/Segments
  - Break Lifting
    - Alignment
    - Vectorization
  - Break Optimizations
-   - What's in a Name?
+   - STOP 🛑
    - Packers
-   - Permissions/Dataflow
-   - Non-Standard Compiler
+   - SCC
+   - Dataflow
 
 ---
 
