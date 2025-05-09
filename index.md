@@ -12,7 +12,7 @@ Note: I'm Jordan!
 
 <!-- .slide: data-background-transition="none" data-background-color="white" data-background-size="contain" data-background="./images/binja.png" -->
 
-Note: I'm one of the developers behind Binary Ninja. I like to say (truthfully) that I'm the worst developer on a team of very smart ones building Binary Ninja. But as a result it means I get to go out into the public and talk to people about it. :-) 
+Note: I'm one of the developers behind Binary Ninja. I also believe the best talks have the shortest biography sections.
 
 ----
 
@@ -22,10 +22,10 @@ Who has...
 - written C?
 - used a debugger?
 - used a decompiler?
+- written a plugin for a decompiler?
 - written a decompiler?
-- written a decompiler plugin?
 
-Note: By a show of hands, please show:
+Note: I have the coveted "after lunch" spot where everyone is usually very sleepy so let's see if we can wake up by moving a little bit. I'd like some audience participation. By a show of hands, please show...
 
 ----
 
@@ -35,6 +35,7 @@ After this talk, you should:
 
 - understand more about how decompilers work and thus,
 - have lots of ideas on how to break them
+- know a bunch of concrete examples that will break all tools
 
 Note: Goals for this talk. 
 
@@ -46,8 +47,6 @@ Note: Goals for this talk.
 - Not an exhaustive list of all possible techniques
 
 Note: While this talk isn't explicitly about breaking debuggers and we're not intentionally targeting them, it's worth noting that most debuggers are also disassemblers and have to parse files so several of these techniques will still apply. However, there are other techniques that are only applicable in dynamic analysis situations.
-
-Instead of showing off a ton of pre-built tools and an exhaustive list of all techniques I'll show a handful of examples that hopefully inspire new techniques.
 
 ----
 
@@ -66,10 +65,10 @@ Instead of showing off a ton of pre-built tools and an exhaustive list of all te
 ## Informally
 
  - Comments
- - Symbol Names (in a stripped binary without debug)
+ - Symbol Names (in a stripped binary without debug info)
  
 Note: these are clearly and obviously lost but it's more than that, for example:
- 
+
 ----
 
 <!-- .slide: style="color:white" -->  
@@ -101,13 +100,31 @@ Note: Can you tell me all possible things this program will do?
 
 Note: Rice's Theorem is an extension to the halting problem that basically proves that not only is it impossible to always be able to tell whether a program terminates, but you can't tell ANY non-trivial property of the program. So by this logic, we should never be able to perfectly analyze any program. 
 
+----
+
+## Code? Data?
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background-image="./images/codeid.gif" -->
+
+Note: One of the hardest problems in computer science is "what is code" and "what is data". This isn't maybe super obvious since we're all used to just seeing analysis tools scan and find the code but for a whole bunch of reasons I'm not going to go into now, this is actually a very difficult problem.
+
+Some good research in the 
 
 ----
 
 ## But...
 
 Note: You all saw the outline, and you are almost certainly aware that decompilers exist. So how do I reconcile my two statements?
-Thankfully, we don't have to be perfect, we just have to work most of the time. Most decompilers are written to operate best on standard compiler code which is much better formed than "all possible code" and therefore many shortcuts/heuristics can be taken.
+
+Thankfully, we don't have to be perfect, we just have to work most of the time. Most decompilers are written to operate best on standard compiler code which is much better formed than "all possible code" and therefore many shortcuts/heuristics can be taken. Often, these assumptions are the very things we'll be abusing.
 
 ---
 
@@ -137,7 +154,7 @@ Note: What about now?
 
 <!-- .slide: data-background-transition="none" data-background-color="#212121" data-background-size="contain" data-background-image="./images/chatgpt-how-compilers-work.png" -->
 
-Note: Yup, that's exactly how a compiler works. It turns out, that there's a ton of similarity between building a compiler and a decompiler. Which makes sense since they're both having to translate from one representation into another. Just turns out, one is about putting the sausage back into the pig.
+Note: Yup, that's exactly how a compiler works. It turns out, that there's a ton of similarity between building a compiler and a decompiler. Which makes sense since they're both having to translate from one representation into another.
 
 ----
 
@@ -148,6 +165,8 @@ Universal:
  - Entry Point
  - Exports / Imports
  - Control Flow / Code Discovery
+ 
+Note: So let's look at some opportunities of what parsing, lifting, and optimizing look like in terms of attack surface to break decompilers.
  
 ----
 
@@ -196,7 +215,19 @@ How much does it prevent analysis/understanding?
 ![](./images/effectiveness-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
+----
+
+## Effective
+
+Strength of Effect on understanding/analysis:
+1. Ineffective
+1. Somewhat Effective 
+1. Moderately effective 
+1. Very effective
+1. Extremely effective
+
 Note: higher is better, so the higher the number, the more effective the obfuscation is at breaking analysis
+
 ----
 
 ## Evident
@@ -206,7 +237,17 @@ How obvious is it?
 ![](./images/evident-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
-Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive.  This is one of the most important attributes as too often people just want to make it hard to reverse something, but what is far more valuable is _subtly_ breaking a decompiler. That, used judiciously, can cause far more trouble than the world's most opaque VM implementation.
+----
+
+## Evident
+
+1. Blatant
+1. Clear
+1. Noticeable
+1. Subtle
+1. Hidden
+
+Note: This is one of the most important attributes as too often people just want to make it hard to reverse something, but what is far more valuable is _subtly_ breaking a decompiler. That, used judiciously, can cause far more trouble than the world's most opaque VM implementation.
 
 ----
 
@@ -217,8 +258,15 @@ How much work is it to implement?
 ![](./images/effort-light.png)
 <!-- .element: style="width: 150px;margin: 0 auto;" -->
 
+----
 
-Note: Pardon the awkward phrasing, I know "stealthy" works better, but this makes the three Es and the alliteration work better. Higher is better, so a higher number means the technique is less observable. Kinda backward, but this lets the scores be additive. 
+## Effort 
+
+1. Trivial
+1. Light
+1. Moderate
+1. Demanding
+1. Grueling
 
 ---
 
@@ -249,22 +297,21 @@ int main() {
 
 Note: not quite exactly what we're using, but close enough and fits on a slide. We're going to take this same challenge and apply a bunch of our techniques to it and see how it looks after each.
 
-
 ---
 
 ## Examples
 
  - Break Parsing
-  - Segments
-  - Relocations
+   - Segments
+   - Relocations
  - Break Lifting
-  - Alignment
-  - Vectorization
+   - Alignment
+   - Vectorization
  - Break Optimizations
-  - What's in a Name?
-  - Packers
-  - Custom Compiler
-  - Permissions/Dataflow
+   - What's in a Name?
+   - Packers
+   - Custom Compiler
+   - Permissions/Dataflow
 
 ---
 
@@ -272,15 +319,28 @@ Note: not quite exactly what we're using, but close enough and fits on a slide. 
 
 ----
 
-### Segment Shenanigans
+### Relocations
+
+Relocations are the worst
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
 </table>
 
-Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but there's a million other variants. I think this is one of my favorite techniques specifically because it's not at all obvious something is even wrong in the first place. You can make the difference between the real code and fake code super subtle if you like. Of course, just running in a debugger should be enough to spot the differences.  Note evident at all! Can be extremely subtle if you want it to be.
+Note: A pain to implement, I'm not even going to make any examples, but this is probably one of the most under-appreciated tools to use to break decompilers, in part because every architecture and platform implements them differently and there are way way more than you think.
+
+----
+### Segment Shenanigans
+
+<table>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>3</td></tr>
+</table>
+
+Note: Many folks have created variants by this. It was pointed out to my by zetatwo who worked with bluec0re for the example documented in PagedOut 5, and it was also documented in PoC||GTFO 
 
 ----
 
@@ -294,25 +354,14 @@ Note: Found accidentally by zetatwo / Calle when making a CTF challenge, but the
 
 ----
 
-### Relocations
-
-Relocations are the worst
-
-<table>
-<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
-<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>1</td></tr>
-</table>
-
-Note: A pain to implement but infinitely complex
-
-----
 
 ### Build Your Own!
 
 1. Fuzz the file, run it. 
-1. If it still works, dump the decompilation and pattern match
+1. If it still works, dump the decompilation and pattern match.
 1. GOTO 1
+
+Note: There are an infinite number of discrepencies between loaders and decompilers. All it takes is playing around with new features and you can find a new break here pretty easily.
 
 ---
 
@@ -372,7 +421,7 @@ Note: The particular optimization being abused here is in the "no-return" proper
 
 `./examples/stop`
 
-[🐶⚡️🔗](https://dogbolt.org/?id=5149a9c7-84ce-4acf-9e47-7312a6b97315#BinaryNinja=141&Hex-Rays=158&angr=136&Ghidra=114)
+[🐶⚡️ Link](https://dogbolt.org/?id=5149a9c7-84ce-4acf-9e47-7312a6b97315#BinaryNinja=141&Hex-Rays=158&angr=136&Ghidra=114)
 
 ----
 
@@ -408,9 +457,13 @@ Note: Has many built-in obfuscations.
 
 ### SCC
 
+[https://scc.binary.ninja/scc.html](https://scc.binary.ninja/scc.html)
+
 ----
 
 ##### Demo! 
+
+[🐶⚡️ Link](https://dogbolt.org/?id=ab0bf805-4f06-4c94-81d0-380bff9e2944#BinaryNinja=1&Ghidra=5&Hex-Rays=28)
 
 ----
 
@@ -418,7 +471,7 @@ Note: Has many built-in obfuscations.
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
@@ -430,19 +483,19 @@ Note: Has many built-in obfuscations.
 
 ----
 
-### SCC
 
-<table>
-<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
-<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
-</table>
 
-----
+---
 
-#### Demo!
+## Bonus: Breaking LLMs
 
-`./examples/scc`
+"Multi Level Marketing Model"
+
+
+- [🎥 Video](https://www.youtube.com/watch?v=M0akm0QgkUU&t=159)
+- [🧑‍💻 Source Code](https://github.com/Live-CTF/LiveCTF-DEFCON33)
+
+Note: Time permitting, share example of MLMM and how it turned out it wasn't even needed!
 
 ---
 

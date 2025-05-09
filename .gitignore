@@ -1,4 +1,5 @@
 *.o
+*.pre
 **/.claude/settings.local.json
 working
 output

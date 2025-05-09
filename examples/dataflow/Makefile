@@ -1,11 +1,11 @@
 # Define the compiler based on the OS
 ifeq ($(shell uname), Linux)
     CC = gcc
-    CFLAGS = -O0 -march=x86-64 -masm=att
+    CFLAGS = -O0 -march=x86-64 -masm=intel
     TARGET_EXT = .elf
 else ifeq ($(shell uname), Darwin)
     CC = gcc
-    CFLAGS = -O0 -arch x86_64 -masm=att 
+    CFLAGS = -O0 -arch x86_64 -masm=intel
     TARGET_EXT = .macho
 endif
 
@@ -27,7 +27,6 @@ $(TARGET): $(OBJ)
 
 # Clean up the build files
 clean:
-	rm -f $(OBJ) base.elf base.macho base.macho.upx base.elf.upx
+	rm -f $(OBJ) base.elf base.macho *.bak
 
 .PHONY: all clean
-
