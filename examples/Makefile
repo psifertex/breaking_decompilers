@@ -7,8 +7,8 @@ ifeq ($(shell uname), Darwin)
     SUBDIRS := $(BASE_SUBDIRS)
 else
     EXT = .elf
-    # On Linux, also build the sections example
-    SUBDIRS := $(BASE_SUBDIRS) sections dataflow
+    # On Linux, also build these additional examples
+    SUBDIRS := $(BASE_SUBDIRS) sections dataflow vectorized
 endif
 
 all:

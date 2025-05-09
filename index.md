@@ -116,7 +116,9 @@ Note: Rice's Theorem is an extension to the halting problem that basically prove
 
 Note: One of the hardest problems in computer science is "what is code" and "what is data". This isn't maybe super obvious since we're all used to just seeing analysis tools scan and find the code but for a whole bunch of reasons I'm not going to go into now, this is actually a very difficult problem.
 
-Some good research in the 
+Definitely some folks who have researched this but there's plenty of folks who also just blindly assume it's solved:
+- https://link.springer.com/content/pdf/10.1007/978-3-642-23808-6_34.pdf
+- https://www.usenix.org/system/files/sec22-pang-chengbin.pdf
 
 ----
 
@@ -166,8 +168,10 @@ Universal:
  - Exports / Imports
  - Control Flow / Code Discovery
  
-Note: So let's look at some opportunities of what parsing, lifting, and optimizing look like in terms of attack surface to break decompilers.
- 
+Note: So let's look at some opportunities of what parsing, lifting, and optimizing look like in terms of attack surface to break decompilers. Someone actually asked me yesterday if this was more about breaking decompilation or disassembly, and it was a good question. We'll be focusing on both as you can tell from this list!
+
+Control Flow / Code Discovery could be considered partially a lifting problem, partially a parsing problem, so we'll list it in both places.
+
 ----
 
 ## Parsing 
@@ -199,6 +203,8 @@ Note: Way more than I can cover here, check out one of my previous talks for mor
 - Higher Level Control Flow Structures
 
 Note: and several other topics worthy of an entire semester worth of advanced CS classes.
+
+This is in particular where we're targeting the decompiler aspect specifically even though the previous steps are also pre-requisites for decompilation they will also break disassemblers.
 
 ---
 
@@ -302,7 +308,7 @@ Note: not quite exactly what we're using, but close enough and fits on a slide. 
 ## Examples
 
  - Break Parsing
-   - Segments
+   - Sections/Segments
    - Relocations
  - Break Lifting
    - Alignment
@@ -310,8 +316,8 @@ Note: not quite exactly what we're using, but close enough and fits on a slide. 
  - Break Optimizations
    - What's in a Name?
    - Packers
-   - Custom Compiler
    - Permissions/Dataflow
+   - Non-Standard Compiler
 
 ---
 
@@ -332,7 +338,7 @@ Relocations are the worst
 Note: A pain to implement, I'm not even going to make any examples, but this is probably one of the most under-appreciated tools to use to break decompilers, in part because every architecture and platform implements them differently and there are way way more than you think.
 
 ----
-### Segment Shenanigans
+### Section Shenanigans
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
@@ -340,20 +346,15 @@ Note: A pain to implement, I'm not even going to make any examples, but this is 
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>3</td></tr>
 </table>
 
-Note: Many folks have created variants by this. It was pointed out to my by zetatwo who worked with bluec0re for the example documented in PagedOut 5, and it was also documented in PoC||GTFO 
+Note: Many folks have created variants by this. It was pointed out to my by zetatwo who worked with bluec0re for the example documented in PagedOut 5, and it was also documented in an earlier PoC||GTFO 
 
 ----
 
 #### Demo! 
 
-`./examples/zetatwo`
+[`./examples/sections`](https://github.com/psifertex/breaking_decompilers/tree/master/examples/sections)
 
 ----
-
-![](./images/libkrb5support.so.0.ida.png)
-
-----
-
 
 ### Build Your Own!
 
@@ -369,21 +370,63 @@ Note: There are an infinite number of discrepencies between loaders and decompil
 
 ----
 
+### Alignment
+
+<!-- .slide: data-auto-animate -->
+
+<!-- Using a completely different approach with separate divs -->
+<div style="text-align: center; height: 8em; position: relative;">
+  <!-- Original bytes - always visible -->
+  <div style="margin-bottom: 3em;">
+    <code style="font-family: monospace;">eb ff c3</code>
+  </div>
+  
+  <!-- First interpretation - only visible for fragment 1 -->
+  <div class="fragment fade-in-then-out" data-fragment-index="1" style="position: absolute; width: 100%; top: 3em;">
+    <div>
+      <code style="font-family: monospace;"><span style="color:#ff5555">eb ff</span> <span style="color:#888888">c3</span></code>
+    </div>
+    <div style="font-size: 0.8em; margin-top: 0.5em;">
+      <code>jmp $-1
+      ret</code>
+    </div>
+  </div>
+  
+  <!-- Second interpretation - only visible for fragment 2 -->
+  <div class="fragment fade-in" data-fragment-index="2" style="position: absolute; width: 100%; top: 3em;">
+    <div>
+      <code style="font-family: monospace;"><span style="color:#888888">eb</span> <span style="color:#5555ff">ff c3</span></code>
+    </div>
+    <div style="font-size: 0.8em; margin-top: 0.5em;">
+      <code>inc ebx</code>
+    </div>
+  </div>
+</div>
+
+Note: This example shows how the same byte sequence can be interpreted in multiple ways. The bytes "eb ff c3" can be read as two different instruction sequences depending on the disassembly technique.
+
+----
 ### Alignment 
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>3</td></tr>
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
 Note: oldest trick in the book, still breaks IDA super easily! At one point they "fixed" it by matching the exact byte pattern match (turns out, they only did it on x86, x64 is still vulnerable to the same thing)
 
+Ghidra used to be vulnerable but fixed it at some point.
+
 ----
 
 #### Demo!
 
-`./examples/alignment`
+[`./examples/alignment`](https://github.com/psifertex/breaking_decompilers/tree/master/examples/alignment)
+
+[🐶⚡️ Link](https://dogbolt.org/?id=aef96f4f-e7d5-4fbc-a251-889a2c71ee4e#BinaryNinja=136&Hex-Rays=27)
+
+Note: I have no idea what IDA is doing here. It simply refuses to decompile it at all. 
 
 ----
 
@@ -392,12 +435,20 @@ Note: oldest trick in the book, still breaks IDA super easily! At one point they
 Just use an instruction that is rare and not implemented, or is incorrectly lifted.
 
 <table>
-<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>3</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>2</td></tr>
-<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>2</td></tr>
+<tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>5</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>1</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>3</td></tr>
 </table>
 
 Note: similar in terms of effectiveness to mis-aligned instructions, depends on the tool and how it gets the lifting wrong. More work than the mis-aligned instructions because you have to find the instructions first, but you can probably just go trolling through libraries or bug reports for Binja or Ghidra. Or just use consensus evaluation and disassembly a single instruction at a time in LOTS of tools. Does require normalization though which can be a headache. That said, relatively easy to fix on the architecture/parsing side.
+
+----
+
+#### Demo! 
+
+[`./examples/vectorized`](https://github.com/psifertex/breaking_decompilers/tree/master/examples/vectorized)
+
+[🐶⚡️ Link](https://dogbolt.org/?id=d2ad9c20-4e15-493f-8af1-93d3a5de8fbb#Hex-Rays=195&BinaryNinja=183&Ghidra=231)
 
 ---
 
@@ -451,7 +502,7 @@ Our newly [open-sourced](https://github.com/Vector35/scc) Shellcode Compiler sup
 <tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
 </table>
 
-Note: Has many built-in obfuscations.
+Note: Has many built-in obfuscations. But really this is just a substitute for any obfuscating compiler. In this case I'm just using a single option to use a different register for the stack pointer. That's it, but because this is a non-standard compiler technique, any decompilers that assume the stack pointer must be EBP/RSP will have lots of trouble.
 
 ----
 
@@ -471,19 +522,17 @@ Note: Has many built-in obfuscations.
 
 <table>
 <tr><td><img src="./images/effectiveness-light.png" style="width: 50px; margin: 0px"></td><td>Effective</td><td>4</td></tr>
-<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>5</td></tr>
-<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>5</td></tr>
+<tr><td><img src="./images/evident-light.png" style="width: 50px; margin: 0px;"></td><td>Evident</td><td>4</td></tr>
+<tr><td><img src="./images/effort-light.png" style="width: 50px; margin: 0px;"></td><td>Effort</td><td>4</td></tr>
 </table>
 
 ----
 
 #### Demo!
 
-`./examples/perms`
+`./examples/dataflow`
 
-----
-
-
+[🐶⚡️ Link](https://dogbolt.org/?id=4c7ce171-9207-4d32-8736-ab9439bc4d2b#Ghidra=220&Hex-Rays=200&BinaryNinja=185)
 
 ---
 
@@ -509,14 +558,14 @@ Note: Time permitting, share example of MLMM and how it turned out it wasn't eve
 
 | Technique | Effectiveness | Evident | Effort |
 |-----------|--------------|---------|--------|
-| Segment Shenanigans | 5 | 5 | 1 |
-| Relocations | 5 | 5 | 1 |
-| Alignment | 3 | 2 | 5 |
-| Vectorized | 3 | 2 | 2 |
+| Section Shenanigans | 4 | 4 | 3 |
+| Relocations | 5 | 4 | 1 |
+| Alignment | 3 | 3 | 5 |
+| Vectorized | 5 | 1 | 3 |
 | STOP | 3 | 2 | 2 |
 | UPX | 4 | 4 | 5 |
 | SCC | 4 | 2 | 5 |
-| Dataflow/Permissions | 4 | 4 | 5 |
+| Dataflow/Permissions | 4 | 4 | 4 |
 
 Note: Higher scores are better in all categories.
 
@@ -538,6 +587,8 @@ Note: Higher scores are better in all categories.
 
 ![](./images/repo-light.png)
 
+Note: Please note that I'd love feedback if you have other examples of things that break binary ninja besides this. As a side-note, we do treat 
+
 ----
 
 ## Credits / Acknowledgements
@@ -545,3 +596,5 @@ Note: Higher scores are better in all categories.
 - [reveal-md](https://github.com/webpro/reveal-md)
 - [podman](https://podman.io/)
 - [chatgpt](https://chat.openai.com/) (o4-mini for image generation)
+
+Note: We all stand on the shoulders of giants, I'm sure none of these techniques are new, thanks to everyone else who has done similar research in the past, sorry for not running down each instance, if I had I was afraid I would miss some other earlier example!
