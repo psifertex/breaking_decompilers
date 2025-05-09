@@ -579,6 +579,17 @@ Note: Higher scores are better in all categories.
 
 ----
 
+## Credits / Acknowledgements
+
+- [reveal-md](https://github.com/webpro/reveal-md)
+- [podman](https://podman.io/)
+- [chatgpt](https://chat.openai.com/) (o4-mini for image generation)
+- All the hackers who've gone before!
+
+Note: We all stand on the shoulders of giants, I'm sure none of these techniques are new, thanks to everyone else who has done similar research in the past, sorry for not running down each instance, if I had I was afraid I would miss some other earlier example!
+
+----
+
 ## Questions?
 
 - https://github.com/psifertex/breaking_decompilers
@@ -588,13 +599,3 @@ Note: Higher scores are better in all categories.
 ![](./images/repo-light.png)
 
 Note: Please note that I'd love feedback if you have other examples of things that break binary ninja besides this. As a side-note, we do treat 
-
-----
-
-## Credits / Acknowledgements
-
-- [reveal-md](https://github.com/webpro/reveal-md)
-- [podman](https://podman.io/)
-- [chatgpt](https://chat.openai.com/) (o4-mini for image generation)
-
-Note: We all stand on the shoulders of giants, I'm sure none of these techniques are new, thanks to everyone else who has done similar research in the past, sorry for not running down each instance, if I had I was afraid I would miss some other earlier example!
